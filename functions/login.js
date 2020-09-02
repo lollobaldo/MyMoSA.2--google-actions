@@ -1,3 +1,5 @@
+const querystring = require('querystring');
+
 exports.handler = async (event, context) => {
   if (event.httpMethod === 'GET') {
     console.log('Requesting login page');
@@ -25,7 +27,7 @@ exports.handler = async (event, context) => {
     // Here, you should validate the user account.
     // In this sample, we do not do that.
     console.log(event.body);
-    const responseurl = decodeURIComponent(event.body.responseurl);
+    const { responseurl } = querystring.parse(event.body);
     console.log(`Redirect to ${responseurl}`);
     // return event.redirect(responseurl);
     return {
