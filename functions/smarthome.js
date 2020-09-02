@@ -84,7 +84,6 @@ const updateDevice = async (execution, deviceId, mqttClient) => {
     case 'action.devices.commands.OnOff':
       console.log('On');
       try {
-        console.log(mqttClient);
         await mqttClient.publish('logs/action', 'connected');
         console.log('Published');
       } catch (e) {
@@ -142,7 +141,7 @@ app.onExecute(async (body) => {
 
   await Promise.all(executePromises);
   console.log('done');
-  client.end(true);
+  // client.end(true);
   console.log('ended');
   return {
     requestId,
