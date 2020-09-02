@@ -25,7 +25,6 @@ exports.handler = async (event, context) => {
   console.log(obj);
   return {
     statusCode: HTTP_STATUS_OK,
-    body: obj,
-    headers: obj,
+    body: JSON.stringify(obj),
   };
 };
