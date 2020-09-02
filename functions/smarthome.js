@@ -110,10 +110,13 @@ app.onExecute(async (body) => {
     'mqtts://mqtt.flespi.io', {
       username: '6j7r0OrwO8ReQmZk0ZszVe6hvAB8IS4E1ZUPBbbe7QiN28VQVddEg9LBxay3QqyF',
       port: 443,
+      clientId: `action-on-google--${Math.random().toString(16).substr(2, 8)}`,
     },
   );
 
-  await client.publish('logs', 'connected');
+  console.log('connected');
+  await client.publish('logs/action', 'connected');
+  console.log('published');
 
   const executePromises = [];
   const intent = body.inputs[0];
@@ -134,6 +137,9 @@ app.onExecute(async (body) => {
   }
 
   await Promise.all(executePromises);
+  console.log('done');
+  client.end();
+  console.log('ended');
   return {
     requestId,
     payload: {
