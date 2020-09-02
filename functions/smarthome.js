@@ -113,4 +113,4 @@ app.onDisconnect((body, headers) => {
   return {};
 });
 
-exports.handler = async (event, context) => app;
+exports.handler = app;
