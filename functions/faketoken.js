@@ -1,6 +1,8 @@
+const querystring = require('querystring');
+
 exports.handler = async (event, context) => {
   const grantType = event.queryStringParameters.grant_type
-    ? event.queryStringParameters.grant_type : event.body.grant_type;
+    ? event.queryStringParameters.grant_type : querystring.parse(event.body).grant_type;
   const secondsInDay = 86400; // 60 * 60 * 24
   const HTTP_STATUS_OK = 200;
   console.log(`Grant type ${grantType}`);
@@ -21,7 +23,7 @@ exports.handler = async (event, context) => {
     };
   }
   return {
-    statusCode: 200,
+    statusCode: HTTP_STATUS_OK,
     body: obj,
   };
 };
