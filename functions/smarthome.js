@@ -76,13 +76,14 @@ app.onQuery(async (body) => {
   };
 });
 
-const updateDevice = async (execution, deviceId) => {
+const updateDevice = async (execution, deviceId, mqttClient) => {
   const { params, command } = execution;
   let state;
   let ref;
   switch (command) {
     case 'action.devices.commands.OnOff':
       console.log('On');
+      mqttClient.publish('lights/leds', '#ffffff');
       break;
     case 'action.devices.commands.StartStop':
       console.log('start');
@@ -114,10 +115,6 @@ app.onExecute(async (body) => {
     },
   );
 
-  console.log('connected');
-  await client.publish('logs/action', 'connected');
-  console.log('published');
-
   const executePromises = [];
   const intent = body.inputs[0];
   // intent.payload.commands.map
@@ -125,7 +122,7 @@ app.onExecute(async (body) => {
     for (const device of command.devices) {
       for (const execution of command.execution) {
         executePromises.push(
-          updateDevice(execution, device.id)
+          updateDevice(execution, device.id, client)
             .then((data) => {
               result.ids.push(device.id);
               Object.assign(result.states, data);
