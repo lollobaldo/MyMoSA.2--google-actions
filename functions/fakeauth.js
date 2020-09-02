@@ -8,7 +8,7 @@ exports.handler = async (event, context) => {
   return {
     statusCode: 301,
     headers: {
-      Location: `.netlify/functions/login?responseurl=${encodeURIComponent(responseurl)}`,
+      Location: `login?responseurl=${encodeURIComponent(responseurl)}`,
     },
   };
 };
