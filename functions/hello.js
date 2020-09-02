@@ -12,7 +12,7 @@ exports.handler = async (event, context) => {
       },
     );
     console.log('connected');
-    await client.publish('logs/action', 'connected');
+    await client.publish('logs/action', `${67}`);
     console.log('published');
     await client.end();
     console.log('Done');

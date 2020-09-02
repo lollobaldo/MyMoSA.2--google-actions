@@ -16,9 +16,9 @@ app.onSync((body) => {
         id: 'washer',
         type: 'action.devices.types.LIGHT',
         traits: [
+          'action.devices.traits.OnOff',
           'action.devices.traits.Brightness',
           'action.devices.traits.ColorSetting',
-          'action.devices.traits.OnOff',
           'action.devices.traits.LightEffects',
         ],
         name: {
@@ -34,7 +34,8 @@ app.onSync((body) => {
         },
         willReportState: false,
         attributes: {
-          pausable: false,
+          commandOnlyOnOff: true,
+          commandOnlyBrightness: true,
           commandOnlyColorSetting: true,
         },
       }],
@@ -82,20 +83,26 @@ const updateDevice = async (execution, deviceId, mqttClient) => {
   let ref;
   switch (command) {
     case 'action.devices.commands.OnOff':
-      console.log('On');
       try {
-        await mqttClient.publish('logs/action', 'connected');
-        console.log('Published');
+        await mqttClient.publish('lights/leds', params.on ? '#ffffff' : '#000000');
       } catch (e) {
-        // Do something about it!
         console.log(e.stack);
       }
       break;
-    case 'action.devices.commands.StartStop':
-      console.log('start');
+    case 'action.devices.commands.BrightnessAbsolute':
+      try {
+        await mqttClient.publish('lights/leds/brightness', `${params.brightness}`);
+      } catch (e) {
+        console.log(e.stack);
+      }
       break;
-    case 'action.devices.commands.PauseUnpause':
-      console.log('pause');
+    case 'action.devices.commands.ColorAbsolute':
+      try {
+        const hex = `#${params.color.spectrumRGB}`;
+        await mqttClient.publish('lights/leds', hex);
+      } catch (e) {
+        console.log(e.stack);
+      }
       break;
     default:
   }
