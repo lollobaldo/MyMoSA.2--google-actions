@@ -42,7 +42,39 @@ app.onSync((body) => {
   };
 });
 
-app.onQuery(async (body) => {});
+const queryDevice = async (deviceId) => {
+  const data = { on: true, color: '#ffffff' };
+  return {
+    on: data.on,
+    color: data.hex,
+    brightness: 90,
+  };
+};
+
+app.onQuery(async (body) => {
+  const { requestId } = body;
+  const payload = {
+    devices: {},
+  };
+  const queryPromises = [];
+  const intent = body.inputs[0];
+  for (const device of intent.payload.devices) {
+    const deviceId = device.id;
+    queryPromises.push(
+      queryDevice(deviceId)
+        .then((data) => {
+          // Add response to device payload
+          payload.devices[deviceId] = data;
+        }),
+    );
+  }
+  // Wait for all promises to resolve
+  await Promise.all(queryPromises);
+  return {
+    requestId,
+    payload,
+  };
+});
 
 const updateDevice = async (execution, deviceId) => {
   const { params, command } = execution;
@@ -63,6 +95,7 @@ const updateDevice = async (execution, deviceId) => {
 };
 
 app.onExecute(async (body) => {
+  console.log('onExecute');
   const { requestId } = body;
   // Execution results are grouped by status
   const result = {
