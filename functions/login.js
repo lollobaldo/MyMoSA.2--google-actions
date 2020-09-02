@@ -1,6 +1,7 @@
 exports.handler = async (event, context) => {
   if (event.httpMethod === 'GET') {
     console.log('Requesting login page');
+    console.log(event.queryStringParameters.responseurl);
     return {
       statusCode: 200,
       body: `
@@ -20,6 +21,7 @@ exports.handler = async (event, context) => {
     };
   }
   if (event.httpMethod === 'POST') {
+    console.log('POST');
     // Here, you should validate the user account.
     // In this sample, we do not do that.
     const responseurl = decodeURIComponent(event.body.responseurl);
