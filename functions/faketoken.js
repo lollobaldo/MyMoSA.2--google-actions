@@ -1,9 +1,9 @@
-exports.faketoken = functions.https.onRequest((request, response) => {
-  const grantType = request.query.grant_type ?
-    request.query.grant_type : request.body.grant_type;
+exports.handler = async (event, context) => {
+  const grantType = event.queryStringParameters.grant_type ?
+    event.queryStringParameters.grant_type : request.body.grant_type;
   const secondsInDay = 86400; // 60 * 60 * 24
   const HTTP_STATUS_OK = 200;
-  functions.logger.log(`Grant type ${grantType}`);
+  console.log(`Grant type ${grantType}`);
 
   let obj;
   if (grantType === 'authorization_code') {
@@ -20,6 +20,8 @@ exports.faketoken = functions.https.onRequest((request, response) => {
       expires_in: secondsInDay,
     };
   }
-  response.status(HTTP_STATUS_OK)
-      .json(obj);
+  return {
+    statusCode: 200,
+    body: obj,
+  };
 });

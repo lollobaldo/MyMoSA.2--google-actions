@@ -1,8 +1,12 @@
-exports.handler = functions.https.onRequest((request, response) => {
+exports.handler = async (event, context) => {
   const responseurl = util.format('%s?code=%s&state=%s',
-      decodeURIComponent(request.query.redirect_uri), 'xxxxxx',
-      request.query.state);
-  functions.logger.log(`Set redirect as ${responseurl}`);
-  return response.redirect(
-      `/login?responseurl=${encodeURIComponent(responseurl)}`);
+      decodeURIComponent(event.queryStringParameters.redirect_uri), 'xxxxxx',
+      request.queryStringParameters.state);
+  console.log(`Set redirect as ${responseurl}`);
+  return {
+    statusCode: 301,
+    headers: {
+      Location: `/login?responseurl=${encodeURIComponent(responseurl)}`,
+    }
+  };
 });
