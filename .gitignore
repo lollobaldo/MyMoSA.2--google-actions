@@ -5,3 +5,4 @@
 **/.firebase
 
 **/functions/key.json
+node_modules

@@ -1,6 +1,6 @@
 exports.handler = async (event, context) => {
-  const grantType = event.queryStringParameters.grant_type ?
-    event.queryStringParameters.grant_type : request.body.grant_type;
+  const grantType = event.queryStringParameters.grant_type
+    ? event.queryStringParameters.grant_type : event.body.grant_type;
   const secondsInDay = 86400; // 60 * 60 * 24
   const HTTP_STATUS_OK = 200;
   console.log(`Grant type ${grantType}`);
@@ -24,4 +24,4 @@ exports.handler = async (event, context) => {
     statusCode: 200,
     body: obj,
   };
-});
+};

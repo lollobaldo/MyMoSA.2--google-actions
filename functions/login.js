@@ -16,8 +16,10 @@ exports.handler = async (event, context) => {
             </form>
           </body>
         </html>
-      `};
-  } else if (event.httpMethod === 'POST') {
+      `,
+    };
+  }
+  if (event.httpMethod === 'POST') {
     // Here, you should validate the user account.
     // In this sample, we do not do that.
     const responseurl = decodeURIComponent(event.body.responseurl);
@@ -27,10 +29,12 @@ exports.handler = async (event, context) => {
       statusCode: 301,
       headers: {
         Location: responseurl,
-      }
+      },
     };
-  } else {
-    // Unsupported method
-    return(405, 'Method Not Allowed');
   }
-});
+  // Unsupported method
+  return {
+    statusCode: 400,
+    body: 'Method not allowed',
+  };
+};
