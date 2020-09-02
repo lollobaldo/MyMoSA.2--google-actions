@@ -84,19 +84,21 @@ app.onExecute(async (body) => {
 
   const executePromises = [];
   const intent = body.inputs[0];
-  // for (const command of intent.payload.commands) {
-  //   for (const device of command.devices) {
-  //     for (const execution of command.execution) {
-  //       executePromises.push(
-  //         updateDevice(execution, device.id)
-  //           .then((data) => {
-  //             result.ids.push(device.id);
-  //             Object.assign(result.states, data);
-  //           })
-  //           .catch(() => functions.logger.error('EXECUTE', device.id)));
-  //     }
-  //   }
-  // }
+  // intent.payload.commands.map
+  for (const command of intent.payload.commands) {
+    for (const device of command.devices) {
+      for (const execution of command.execution) {
+        executePromises.push(
+          updateDevice(execution, device.id)
+            .then((data) => {
+              result.ids.push(device.id);
+              Object.assign(result.states, data);
+            })
+            .catch(() => console.error('EXECUTE', device.id)),
+        );
+      }
+    }
+  }
 
   await Promise.all(executePromises);
   return {
