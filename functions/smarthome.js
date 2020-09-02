@@ -108,8 +108,8 @@ app.onExecute(async (body) => {
 
   const client = await mqtt.connectAsync(
     'mqtts://mqtt.flespi.io', {
-      username: '6j7r0OrwO8ReQmZk0ZszVe6hvAB8IS4E1ZUPBbbe7QiN28VQVddEg9LBxay3QqyF',
-      port: 443,
+      username: 'Djd77fBUcRepR3q1RveiU2sggtd1iDuLKvJIA8qANuOum4l3nn97dqbiJe9SFrre',
+      port: 8883,
       clientId: `action-on-google--${Math.random().toString(16).substr(2, 8)}`,
     },
   );
@@ -138,7 +138,7 @@ app.onExecute(async (body) => {
 
   await Promise.all(executePromises);
   console.log('done');
-  client.end();
+  client.end(true);
   console.log('ended');
   return {
     requestId,
