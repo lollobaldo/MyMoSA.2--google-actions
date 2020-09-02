@@ -24,6 +24,7 @@ exports.handler = async (event, context) => {
     console.log('POST');
     // Here, you should validate the user account.
     // In this sample, we do not do that.
+    console.log(event.body);
     const responseurl = decodeURIComponent(event.body.responseurl);
     console.log(`Redirect to ${responseurl}`);
     // return event.redirect(responseurl);
