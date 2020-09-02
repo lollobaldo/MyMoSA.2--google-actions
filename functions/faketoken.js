@@ -22,6 +22,7 @@ exports.handler = async (event, context) => {
       expires_in: secondsInDay,
     };
   }
+  console.log(obj);
   return {
     statusCode: HTTP_STATUS_OK,
     body: obj,
