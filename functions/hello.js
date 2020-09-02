@@ -14,13 +14,9 @@ exports.handler = async (event, context) => {
     console.log('connected');
     await client.publish('logs/action', 'connected');
     console.log('published');
-    // This line doesn't run until the server responds to the publish
     await client.end();
-    // This line doesn't run until the client has disconnected without error
     console.log('Done');
   } catch (e) {
-    // Do something about it!
     console.log(e.stack);
-    process.exit();
   }
 };
