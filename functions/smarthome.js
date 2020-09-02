@@ -83,7 +83,8 @@ const updateDevice = async (execution, deviceId, mqttClient) => {
   switch (command) {
     case 'action.devices.commands.OnOff':
       console.log('On');
-      mqttClient.publish('lights/leds', '#ffffff');
+      await mqttClient.publish('lights/leds', '#ffffff');
+      console.log('Published');
       break;
     case 'action.devices.commands.StartStop':
       console.log('start');
