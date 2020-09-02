@@ -25,5 +25,6 @@ exports.handler = async (event, context) => {
   return {
     statusCode: HTTP_STATUS_OK,
     body: obj,
+    headers: obj,
   };
 };
