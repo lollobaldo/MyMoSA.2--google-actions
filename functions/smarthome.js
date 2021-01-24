@@ -6,6 +6,14 @@ const USER_ID = '123';
 
 const app = smarthome();
 
+const devicesChannels = {
+  'floor-lamp': 'lights/bulbs',
+  'leds-light': 'lights/leds',
+};
+
+// eslint-disable-next-line no-mixed-operators
+const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
+
 app.onSync((body) => {
   console.log('syncing');
   return {
@@ -13,16 +21,15 @@ app.onSync((body) => {
     payload: {
       agentUserId: USER_ID,
       devices: [{
-        id: 'washer',
+        id: 'floor-lamp',
         type: 'action.devices.types.LIGHT',
         traits: [
           'action.devices.traits.OnOff',
           'action.devices.traits.Brightness',
           'action.devices.traits.ColorSetting',
-          'action.devices.traits.LightEffects',
         ],
         name: {
-          defaultNames: ['My LEDs'],
+          defaultNames: ['Leds'],
           name: 'Leds',
           nicknames: ['Light', 'Lights', 'Led', 'Leds'],
         },
@@ -37,6 +44,10 @@ app.onSync((body) => {
           commandOnlyOnOff: true,
           commandOnlyBrightness: true,
           commandOnlyColorSetting: true,
+          colorTemperatureRange: {
+            temperatureMinK: 2000,
+            temperatureMaxK: 9000,
+          },
         },
       }],
     },
@@ -84,22 +95,22 @@ const updateDevice = async (execution, deviceId, mqttClient) => {
   switch (command) {
     case 'action.devices.commands.OnOff':
       try {
-        await mqttClient.publish('lights/leds', params.on ? '#ffffff' : '#000000');
+        await mqttClient.publish('lights/bulbs', params.on ? 'N255,0' : 'F255,0');
       } catch (e) {
         console.log(e.stack);
       }
       break;
     case 'action.devices.commands.BrightnessAbsolute':
       try {
-        await mqttClient.publish('lights/leds/brightness', `${params.brightness}`);
+        await mqttClient.publish('lights/bulbs', `N${params.brightness},0`);
       } catch (e) {
         console.log(e.stack);
       }
       break;
     case 'action.devices.commands.ColorAbsolute':
       try {
-        const hex = `#${params.color.spectrumRGB}`;
-        await mqttClient.publish('lights/leds', hex);
+        const temp = map(params.color.temperatureK, 2000, 9000, 0, 255);
+        await mqttClient.publish('lights/leds', `N255,${temp}`);
       } catch (e) {
         console.log(e.stack);
       }
