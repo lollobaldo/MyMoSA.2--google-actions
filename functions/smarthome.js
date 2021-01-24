@@ -102,7 +102,8 @@ const updateDevice = async (execution, deviceId, mqttClient) => {
       break;
     case 'action.devices.commands.BrightnessAbsolute':
       try {
-        await mqttClient.publish('lights/bulbs', `N${params.brightness},0`);
+        const brightness = map(params.brightness, 0, 100, 0, 255);
+        await mqttClient.publish('lights/bulbs', `N${brightness},0`);
       } catch (e) {
         console.log(e.stack);
       }
