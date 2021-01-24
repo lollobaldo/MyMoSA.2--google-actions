@@ -44,6 +44,7 @@ app.onSync((body) => {
           commandOnlyOnOff: true,
           commandOnlyBrightness: true,
           commandOnlyColorSetting: true,
+          colorModel: 'rgb',
           colorTemperatureRange: {
             temperatureMinK: 2000,
             temperatureMaxK: 9000,
