@@ -13,7 +13,7 @@ exports.handler = async function (event, context) {
       clientId: `action-on-google--${Math.random().toString(16).substr(2, 8)}`,
     },
   );
-  await client.publish('lights/bulbs', 'N255,0');
+  await client.publish('lights/bulbs', 'N0,0');
   client.end();
   return { statusCode: 200, body: 'Successfull' };
 };
