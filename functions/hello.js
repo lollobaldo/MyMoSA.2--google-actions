@@ -2,7 +2,7 @@ const mqtt = require('async-mqtt');
 
 const asyncMsg = (client) => new Promise((resolve) => client.on('message', (_, msg) => resolve(msg)));
 
-(async (event, context) => {
+exports.handler = async (event, context) => {
   console.log('starting');
 
   try {
@@ -24,9 +24,9 @@ const asyncMsg = (client) => new Promise((resolve) => client.on('message', (_, m
     const msg = await asyncMsg(client);
     console.log(msg.toString());
     client.end();
-    return;
     console.log('Done');
   } catch (e) {
     console.log(e.stack);
   }
-})();
+  return { statusCode: 200, body: 'HAeeoje' };
+};
