@@ -108,7 +108,7 @@ app.onQuery(async (body) => {
   console.log('got promises');
   // Wait for all promises to resolve
   await Promise.all(queryPromises);
-  client.end();
+  client.end(true);
   console.log('disco');
   return {
     requestId,
@@ -188,7 +188,7 @@ app.onExecute(async (body) => {
 
   await Promise.all(executePromises);
   console.log('done');
-  // client.end(true);
+  client.end(true);
   console.log('ended');
   return {
     requestId,
