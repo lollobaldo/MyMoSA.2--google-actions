@@ -1,4 +1,7 @@
 console.log('at least it opens');
+const os = require('os');
+
+console.log(os.CPU());
 
 const mqtt = require('async-mqtt');
 
