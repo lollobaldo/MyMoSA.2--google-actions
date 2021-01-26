@@ -16,6 +16,18 @@ const map = (value, lowFrom, highFrom, lowTo, highTo) => (
   (value - lowFrom) * (highTo - lowFrom) / (highFrom - lowFrom) + lowTo
 );
 
+const asyncMsg = (client) => new Promise((resolve) => client.on('message', (_, msg) => resolve(msg)));
+
+const message2state = (message) => {
+  if (message && (message.charAt(0) === 'N' || message.charAt(0) === 'F')) {
+    const [brightness, temperature] = message.substring(1).split(',').map(Number);
+    const state = message.charAt(0) === 'N';
+    return { state, brightness, temperature };
+  }
+  console.error('Invalid message');
+  return {};
+};
+
 app.onSync((body) => {
   console.log('syncing');
   return {
@@ -55,16 +67,27 @@ app.onSync((body) => {
   };
 });
 
-const queryDevice = async (deviceId) => {
-  const data = { on: true, color: '#ffffff' };
+const queryDevice = async (deviceId, mqttClient) => {
+  mqttClient.subscribe(devicesChannels[deviceId]);
+  const msg = await asyncMsg(mqttClient);
+  const { state, brightness, temperature } = message2state(msg);
   return {
-    on: data.on,
-    color: data.hex,
-    brightness: 90,
+    on: state,
+    brightness: map(brightness, 0, 255, 0, 100),
+    color: {
+      temperatureK: map(temperature, 0, 255, 2000, 9000),
+    },
   };
 };
 
 app.onQuery(async (body) => {
+  const client = await mqtt.connectAsync(
+    'mqtts://mqtt.flespi.io', {
+      username: 'Djd77fBUcRepR3q1RveiU2sggtd1iDuLKvJIA8qANuOum4l3nn97dqbiJe9SFrre',
+      port: 8883,
+      clientId: `action-on-google--${Math.random().toString(16).substr(2, 8)}`,
+    },
+  );
   const { requestId } = body;
   const payload = {
     devices: {},
@@ -74,7 +97,7 @@ app.onQuery(async (body) => {
   for (const device of intent.payload.devices) {
     const deviceId = device.id;
     queryPromises.push(
-      queryDevice(deviceId)
+      queryDevice(deviceId, client)
         .then((data) => {
           // Add response to device payload
           payload.devices[deviceId] = data;
@@ -83,6 +106,7 @@ app.onQuery(async (body) => {
   }
   // Wait for all promises to resolve
   await Promise.all(queryPromises);
+  client.end();
   return {
     requestId,
     payload,

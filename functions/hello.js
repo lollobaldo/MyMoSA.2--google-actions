@@ -1,6 +1,8 @@
 const mqtt = require('async-mqtt');
 
-exports.handler = async (event, context) => {
+const asyncMsg = (client) => new Promise((resolve) => client.on('message', (_, msg) => resolve(msg)));
+
+(async (event, context) => {
   console.log('starting');
 
   try {
@@ -14,9 +16,17 @@ exports.handler = async (event, context) => {
     console.log('connected');
     await client.publish('logs/action', `${67}`);
     console.log('published');
-    await client.end();
+    client.subscribe('lights/bulbs');
+    // client.on('message', (_, msg) => {
+    //   console.log(msg.toString());
+    //   return msg;
+    // });
+    const msg = await asyncMsg(client);
+    console.log(msg.toString());
+    client.end();
+    return;
     console.log('Done');
   } catch (e) {
     console.log(e.stack);
   }
-};
+})();
