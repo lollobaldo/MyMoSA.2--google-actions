@@ -39,7 +39,7 @@ app.onSync((body) => {
           manufacturer: 'Lorenzo Baldini',
           model: 'Leds-ESP-0.9',
           hwVersion: '0.9',
-          swVersion: '0.9.0',
+          swVersion: '1.0',
         },
         willReportState: false,
         attributes: {
