@@ -11,8 +11,10 @@ const devicesChannels = {
   'leds-light': 'lights/leds',
 };
 
-// eslint-disable-next-line no-mixed-operators
-const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
+const map = (value, lowFrom, highFrom, lowTo, highTo) => (
+  // eslint-disable-next-line no-mixed-operators
+  (value - lowFrom) * (highTo - lowFrom) / (highFrom - lowFrom) + lowTo
+);
 
 app.onSync((body) => {
   console.log('syncing');
@@ -41,10 +43,8 @@ app.onSync((body) => {
         },
         willReportState: false,
         attributes: {
-          commandOnlyOnOff: true,
-          commandOnlyBrightness: true,
-          commandOnlyColorSetting: true,
-          colorModel: 'rgb',
+          // ColorSetting
+          // colorModel: 'rgb',
           colorTemperatureRange: {
             temperatureMinK: 2000,
             temperatureMaxK: 9000,
