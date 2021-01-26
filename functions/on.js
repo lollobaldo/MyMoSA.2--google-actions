@@ -1,3 +1,5 @@
+console.log('at least it opens');
+
 const mqtt = require('async-mqtt');
 
 const devicesChannels = {
