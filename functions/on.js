@@ -3,7 +3,9 @@ const os = require('os');
 
 console.log(os.cpus());
 
-const mqtt = require('async-mqtt');
+const mqtt = require('mqtt');
+
+console.log('this one does work');
 
 const devicesChannels = {
   'floor-lamp': 'lights/bulbs',
