@@ -71,6 +71,7 @@ const queryDevice = async (deviceId, mqttClient) => {
   mqttClient.subscribe(devicesChannels[deviceId]);
   const msg = await asyncMsg(mqttClient);
   const { state, brightness, temperature } = message2state(msg);
+  console.log({ state, brightness, temperature });
   return {
     on: state,
     brightness: map(brightness, 0, 255, 0, 100),
@@ -104,9 +105,11 @@ app.onQuery(async (body) => {
         }),
     );
   }
+  console.log('got promises');
   // Wait for all promises to resolve
   await Promise.all(queryPromises);
   client.end();
+  console.log('disco');
   return {
     requestId,
     payload,
