@@ -6,3 +6,6 @@
 
 **/functions/key.json
 node_modules
+
+# Local Netlify folder
+.netlify

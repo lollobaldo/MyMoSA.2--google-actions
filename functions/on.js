@@ -32,4 +32,5 @@ exports.handler = async function (event, context) {
   );
   await client.publish('lights/bulbs', 'N255,0');
   client.end();
+  return { statusCode: 200, body: JSON.stringify(devicesChannels) };
 };
