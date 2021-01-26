@@ -3,7 +3,7 @@ const os = require('os');
 
 console.log(os.cpus());
 
-const mqtt = require('mqtt');
+const mqtt = require('async-mqtt');
 
 console.log('this one does work');
 
