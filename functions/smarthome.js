@@ -16,7 +16,7 @@ const map = (value, lowFrom, highFrom, lowTo, highTo) => (
   (value - lowFrom) * (highTo - lowFrom) / (highFrom - lowFrom) + lowTo
 );
 
-const asyncMsg = (client) => new Promise((resolve) => client.on('message', (_, msg) => resolve(msg)));
+const asyncMsg = (client) => new Promise((resolve) => client.on('message', (_, msg) => resolve(msg.toString())));
 
 const message2state = (message) => {
   if (message && (message.charAt(0) === 'N' || message.charAt(0) === 'F')) {
